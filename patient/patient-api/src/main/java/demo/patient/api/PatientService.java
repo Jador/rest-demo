@@ -1,6 +1,7 @@
 package demo.patient.api;
 
 import demo.patient.model.Patient;
+import exception.ResourceNotFoundExcpetion;
 
 import java.util.List;
 
@@ -34,7 +35,7 @@ public interface PatientService {
     /**
      * @return the {@link demo.patient.model.Patient} with the given {@code ID}
      */
-    public Patient getById(String id);
+    public Patient getById(String id) throws ResourceNotFoundExcpetion;
 
     /**
      * @return the {@link demo.patient.model.Patient} with the given {@code MRN}

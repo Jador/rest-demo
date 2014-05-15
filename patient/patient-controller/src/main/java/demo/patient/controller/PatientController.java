@@ -3,9 +3,12 @@ package demo.patient.controller;
 import demo.common.Response;
 import demo.patient.api.PatientService;
 import demo.patient.model.Patient;
+import exception.ResourceNotFoundExcpetion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * [Class Description Here]
@@ -19,7 +22,7 @@ public class PatientController {
     @Autowired
     private PatientService service;
 
-    @RequestMapping("/")
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     @ResponseBody
     public Response<Patient> getPatients() {
         Response<Patient> response = new Response<Patient>();
@@ -27,11 +30,19 @@ public class PatientController {
         return response;
     }
 
-    @RequestMapping(value = "/{id}")
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public Response<Patient> getPatientById(@PathVariable String id) {
+    public Response<Patient> getPatientById(@PathVariable String id, HttpServletResponse httpResponse) {
         Response<Patient> response = new Response<Patient>();
-        response.getEntities().add(service.getById(id));
+        try {
+            response.setSuccess(true);
+            response.getEntities().add(service.getById(id));
+        } catch (ResourceNotFoundExcpetion resourceNotFoundExcpetion) {
+            response.setSuccess(false);
+            response.getErrors().add(resourceNotFoundExcpetion.getMessage());
+            httpResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        }
+
         return response;
     }
 

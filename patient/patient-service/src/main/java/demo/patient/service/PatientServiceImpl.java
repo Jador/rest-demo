@@ -2,7 +2,7 @@ package demo.patient.service;
 
 import demo.patient.api.PatientService;
 import demo.patient.model.Patient;
-import exception.ResourceNotFoundExcpetion;
+import exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -45,12 +45,12 @@ public class PatientServiceImpl implements PatientService {
      * {@inheritDoc}
      */
     @Override
-    public Patient getById(String id) throws ResourceNotFoundExcpetion {
+    public Patient getById(String id) throws ResourceNotFoundException {
         if(patientMap.containsKey(id)) {
             return patientMap.get(id);
         }
         else {
-            throw new ResourceNotFoundExcpetion("Could not find patient with id: " + id);
+            throw new ResourceNotFoundException("Could not find patient with id: " + id);
         }
     }
 
@@ -91,7 +91,11 @@ public class PatientServiceImpl implements PatientService {
      * {@inheritDoc}
      */
     @Override
-    public void removePatient(String id) {
-        patientMap.remove(id);
+    public void removePatient(String id) throws ResourceNotFoundException {
+        if (patientMap.containsKey(id)) {
+            patientMap.remove(id);
+        } else {
+            throw new ResourceNotFoundException("Could not remove patient with id: " + id + " as it did not exist");
+        }
     }
 }

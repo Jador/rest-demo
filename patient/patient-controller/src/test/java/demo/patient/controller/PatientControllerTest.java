@@ -2,7 +2,7 @@ package demo.patient.controller;
 
 import demo.patient.api.PatientService;
 import demo.patient.model.Patient;
-import exception.ResourceNotFoundExcpetion;
+import exception.ResourceNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,10 +23,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.contains;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -77,7 +74,7 @@ public class PatientControllerTest {
             @Override
             public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
                 String id = (String) invocationOnMock.getArguments()[0];
-                throw new ResourceNotFoundExcpetion("Could not find patient with id: " + id);
+                throw new ResourceNotFoundException("Could not find patient with id: " + id);
             }
         });
 

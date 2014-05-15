@@ -2,14 +2,13 @@ package demo.patient.service;
 
 import demo.patient.api.PatientService;
 import demo.patient.model.Patient;
+import exception.ResourceNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 /**
  * Tests to ensure that the {@link demo.patient.service.PatientServiceImpl} functions as expected
@@ -44,7 +43,7 @@ public class PatientServiceImplTest {
     }
 
     @Test
-    public void testGetById() {
+    public void testGetById() throws ResourceNotFoundException {
         Patient p = createPatient("mrn", "Doe", "John");
         Patient p2 =  service.getById(p.getId());
         assertEquals(p, p2);
@@ -58,7 +57,7 @@ public class PatientServiceImplTest {
     }
 
     @Test
-    public void testRemove() {
+    public void testRemove() throws ResourceNotFoundException {
         Patient p = createPatient("mrn", "Doe", "John");
         createPatient("mrn", "Doe", "Jane");
 
@@ -82,7 +81,7 @@ public class PatientServiceImplTest {
     }
 
     public Patient createPatient(String mrn, String lastName, String firstName) {
-        return service.addPatient(mrn, lastName, firstName);
+        return service.updatePatient(new Patient(mrn, lastName, firstName));
     }
 
 }
